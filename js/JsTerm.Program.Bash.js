@@ -127,6 +127,7 @@ Uize.module ({
 
 						function _getClassName (_command) {
 							return {
+								'cat':'JsTerm.Program.Cat',
 								'cd':function (_argumentsObject, _callback) {
 									_this._filesystem.open (
 										_argumentsObject.argv[1],

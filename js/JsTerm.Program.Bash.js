@@ -132,7 +132,6 @@ Uize.module ({
 									_this._filesystem.open (
 										_argumentsObject.argv[1],
 										function (_fp) {
-											console.log (_fp)
 											_fp != JsTerm.FileSystem.UNDEFINED_FILE_HANDLE &&
 												_this._filesystem.set ({
 													workingDirectory:_this._filesystem.get ('resources')[_fp]

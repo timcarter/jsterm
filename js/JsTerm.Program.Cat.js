@@ -19,7 +19,8 @@ Uize.module ({
 				_callback = _this.get ('callback'),
 				_option,
 				_dateObject,
-				_workingDirectoryContents = _this.getInherited('filesystem').get('workingDirectory').get('contents'),
+				_filesystem = _this.getInherited('filesystem'),
+				_workingDirectoryContents = _filesystem.get('workingDirectory').get('contents'),
 				_filesToTest = [],
 				_arguments = _this.get('argv'),
 				_argumentsLength = _arguments.length,
@@ -33,13 +34,15 @@ Uize.module ({
 				function (_option, _processNext) {
 					if (_option in _workingDirectoryContents) {
 						if (_option.indexOf ('JsTerm.FileSystemObject.Folder')) {
-							Uize.require(
-								_workingDirectoryContents[_option],
-								function (_optionClass) {
-									_this.echo(_optionClass.get('contents'));
-									_processNext();
+							_filesystem.open(
+								_option,
+								function (_fp) {
+									_filesystem.get('resources')[_fp].read(function (_data) {
+										_this.echo(_data);
+										_processNext();
+									})
 								}
-							)
+							);
 						} else {
 							_this.echo ('cat: ' + _option + ': Is a directory');
 							_processNext();

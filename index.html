@@ -1,0 +1,72 @@
+<html>
+	<head>
+		<title>Command Prompt</title>
+		<link href='http://fonts.googleapis.com/css?family=Trocchi' rel='stylesheet' type='text/css'>
+		<style type='text/css'>
+			body {
+				background:#021321;
+				color:#ddd;
+				font-family:'Trocchi', monospace, serif;
+			}
+
+			.input {
+				outline:none;
+				white-space:nowrap;
+			}
+
+			.username {
+				color:#f95165;
+			}
+
+			.host, .path {
+				color:#5e8cba;
+			}
+
+			.input {
+				color:#42c574;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="page_bash-container">
+		</div>
+
+		<script id="page-template" type='text/jst'>
+			<span class="username">[% .username %]</span>@<span class="host">[% .host %]</span><span class="path">[% .path %]</span>:$ </span><span class="input" id="[% .id %]" contenteditable="true"></span><br/>
+		</script>
+		<script type='text/javascript' src="js/Uize.js"></script>
+		<script type='text/javascript'>
+			Uize.module ({
+				required:[
+					'JsTerm.Program.Bash',
+					'JsTerm.Data.Folder.Root',
+					'Uize.Widget.Page',
+					'Uize.Node',
+					'Uize.Url'
+				],
+				builder:function () {
+					window.page = new Uize.Widget.Page;
+					
+					window.page.addChild (
+						'bash',
+						JsTerm.Program.Bash,
+						{
+							host:Uize.Url.from(window.location.toString()).host || 'localhost',
+							commandLineTemplate:document.getElementById ('page-template').innerHTML
+						}
+					);
+
+					Uize.Node.wire (
+						document,
+						'click',
+						function () {
+						// focus on the currently selected input
+							page.children.bash.getCurrentInput ().focus ()
+						}
+					);
+					window.page.wireUi ();
+				}
+			});
+		</script>
+	</body>
+</html>

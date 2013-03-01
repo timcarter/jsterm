@@ -120,7 +120,7 @@ Uize.module ({
 							Uize.Node.injectHtml (
 								_containerNode,
 								'bash: ' + _command + ': command not found<br/><br/>',
-								'inner bottom'	
+								'inner bottom'
 							);
 							_this.execute ();
 						}
@@ -129,6 +129,7 @@ Uize.module ({
 							return {
 								'cat':'JsTerm.Program.Cat',
 								'cd':function (_argumentsObject, _callback) {
+									var _dir = _argumentsObject.argv[1];
 									_this._filesystem.open (
 										_argumentsObject.argv[1],
 										function (_fp) {
@@ -191,34 +192,26 @@ Uize.module ({
 							_input && _history.push (_input);
 
 							if (typeof _commandClassName == 'function')
-								_commandClassName (_argumentsObject,function (){_this.updateUi ()})
-							;
+								_commandClassName (_argumentsObject,function (){_this.updateUi ()});
 							else if (_commandClassName)
-								Uize.module ({
-									required:_commandClassName,
-									builder:function () {
+								Uize.require(
+									_commandClassName,
+									function(_commandClass) {
+										var _currCommand = _this.addChild(
+											'command' + _history.length,
+											_commandClass,
+											{
+												shellNode:_this.getNode('container'),
+												argv:_arguments,
+												optionString:_argumentsObject.optionString,
+												callback:function() {_this.updateUi()}
+											}
+										);
 
-										if (_commandClassName) {
-											var _currCommand = _this.addChild (
-												'command' + _history.length,
-												(new Function ('try {return ' + _commandClassName + '} catch (e) {}')) (),
-												{
-													shellNode:_this.getNode ('container'),
-													argv:_arguments,
-													optionString:_argumentsObject.optionString,
-													callback:function () {_this.updateUi ()}
-												}
-											);
-
-											_currCommand.wireUi ();
-											_currCommand.execute ();	
-										}
-										else
-											_informError (_commandName)
-										;
+										_currCommand.wireUi();
+										_currCommand.execute();
 									}
-								})
-							;
+								);
 							else if (!_commandName) _this.execute ();
 							else _informError (_commandName);
 

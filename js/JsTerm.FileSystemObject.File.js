@@ -6,6 +6,10 @@ Uize.module ({
 			_classPrototype = _class.prototype
 		;
 
+		_class.stateProperties({
+			contentType:'contentType'
+		});
+
 		_class.set ({
 			contents:'',
 			type:'file'

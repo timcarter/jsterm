@@ -37,8 +37,9 @@ Uize.module ({
 							_filesystem.open(
 								_option,
 								function (_fp) {
-									_filesystem.get('resources')[_fp].read(function (_data) {
-										_this.echo(_data);
+									var _program = _filesystem.get('resources')[_fp];
+									_program.read(function (_data) {
+										_this.echo(_data, _program.get('contentType'));
 										_processNext();
 									})
 								}

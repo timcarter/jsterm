@@ -138,7 +138,14 @@ Uize.module ({
 		};
 
 		/*** Public Instance Methods ***/
-		_classPrototype.echo = function (_text) {
+		_classPrototype.echo = function (_text, _contentType) {
+			switch(_contentType) {
+				case 'image/jpg':
+				case 'image/jpeg':
+					_text = '<img src="data:image/jpeg;base64,' + _text + '" />';
+					break;
+			}
+
 			Uize.Node.injectHtml (
 				this.get ('shellNode'),
 				_text + '<br/>',

@@ -5,6 +5,7 @@ Uize.module ({
 
 		_class.set ({
 			author:'timcarter',
+			contentType:'text/plain',
 			contents:'History\'s like an amusement park, except instead of rides you have dates to memorize.',
 			timestamp:'1305875485014',
 			permissions:'777'

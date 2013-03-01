@@ -34,25 +34,20 @@ Uize.module ({
 				_path,
 				function (_results) {
 					if (_results)
-						Uize.module ({
-							required:[_results],
-							builder:function () {
-								var
-									_fileSystemObjectInstance = (new Function ('try { return new ' + _results + '} catch (e) {}'))()
-								;
-								if (_fileSystemObjectInstance) {
-									_this._resources [_this._referenceCounter] = _fileSystemObjectInstance;
+						Uize.require(
+							_results,
+							function(_resultsClass) {
+								var _fsoInstance = new _resultsClass;
+								if (_fsoInstance) {
+									_this._resources [_this._referenceCounter] = _fsoInstance;
 									_pointer = _this._referenceCounter++;
 								}
-
 								_callback (_pointer);
 							}
-						})
-					;
-					else {
+						);
+					else
 						// provide some error handling here, or just return null
-						_callback (_pointer)
-					}
+						_callback (_pointer);
 				}
 			);
 			/*
